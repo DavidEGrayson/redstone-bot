@@ -18,8 +18,12 @@ module JumpsOnCommand
 	def handle_chat(message)
 		if message.is_a?(UserChatMessage) && message.contents == 'jump!'
 			chat "OK, #{message.username}!"
-			@jumping = true
-			@jumping_start = Time.now
+			jump!
 		end
+	end
+	
+	def jump!
+		@jumping = true
+		@jumping_start = Time.now
 	end
 end
