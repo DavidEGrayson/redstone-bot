@@ -13,7 +13,7 @@ class Bot
 
 	# Source: http://www.wiki.vg/Chat except I left out the funny characters
 	# because I'd have to think a little bit more about encodings to make it work
-	AllowedChatChars = '!\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~| '.split('')
+	AllowedChatChars = '!\"#$%&\'`()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~| '.split('')
 	
 	def send_login_request(fields)
 		fields = {protocol_version: PROTOCOL_VERSION}.merge(fields)
