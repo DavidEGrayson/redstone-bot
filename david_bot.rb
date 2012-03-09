@@ -6,7 +6,7 @@ module EvaluatesRuby
 	#   "eval " + string
 	#   EvaluatesRuby.instance_method(:handle_chat).bind(self).call(message)
 	def handle_chat(message)
-		if message.is_a?(UserChatMessage) && message.contents =~ /eval (.+)/
+		if message.is_a?(UserChatMessage) && message.contents =~ /^eval (.+)/
 			string = $1
 			result = nil
 			thread = Thread.new do
