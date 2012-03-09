@@ -3,6 +3,8 @@ require_relative 'redstone-bot.rb'
 module EvaluatesRuby
 	# Vulnerabilities:
 	#   Thread.new { while true; end }
+	#   "eval " + string
+	#   EvaluatesRuby.instance_method(:handle_chat).bind(self).call(message)
 	def handle_chat(message)
 		if message.is_a?(UserChatMessage) && message.contents =~ /eval (.+)/
 			string = $1
@@ -20,11 +22,17 @@ module EvaluatesRuby
 				result = ":("
 			end
 			
-			case result
-				when String then chat result
-				when nil then
-				else chat result.inspect
-				end
+			begin
+				case result
+					when String then chat result
+					when nil then
+					else chat result.inspect
+					end
+			rescue SecurityError => e
+				chat e.message 
+			end
+			
+			GC.enable
 		end
 	end
 end
