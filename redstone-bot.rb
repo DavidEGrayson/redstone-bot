@@ -21,6 +21,10 @@ Thread.abort_on_exception = true
 class Bot
 	attr_reader :health
 
+	def initialize
+		@whitelist = []
+	end
+
 	def run
 		@mutex = Mutex.new
 	
@@ -55,7 +59,7 @@ class Bot
 		end
 		
 		while true
-			receive_packet(whitelist: [])
+			receive_packet(whitelist: @whitelist)
 		end
 	end
 	

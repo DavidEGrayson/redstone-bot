@@ -9,6 +9,7 @@ class KevinBot < Bot
 		@targets = {}
 		@jumping_start = Time.at(0)
 		@y_velocity = 0.1
+		@whitelist = [0x08]
 	end
 
 	def update_distance(target)
@@ -26,6 +27,15 @@ class KevinBot < Bot
 
 	def look_closest_target
 		@closest = closest_target
+		#if @closest != @last_closest || defined?(@last_closest) == nil
+			if !@closest.nil?
+				puts "#{Time.now}: Following #{@closest[:name]} (distance #{@closest[:distance]})"
+			else
+				puts "#{Time.now}: Following nobody"
+			end
+			@last_closest = @closest
+		#end
+		
 		if !@closest.nil?
 			x, y, z = @closest[:look_vector].to_a
 			@position[:yaw] = Math::atan2(x, -z) * 180 / Math::PI + 180
@@ -102,6 +112,11 @@ class KevinBot < Bot
 		send_player_position_and_look squelch: true
 	end
 
+#	LEASH = 5
+#	SPEED_DIVIDER = 0.4
+#	JUMP_VELOCITY = 7
+#	GRAVITY = 1
+#	JUMP_COOLDOWN = 2
 	LEASH = 2
 	SPEED_DIVIDER = 4
 	JUMP_VELOCITY = 0.7
