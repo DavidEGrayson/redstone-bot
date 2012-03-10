@@ -2,18 +2,59 @@ require 'matrix'
 
 class Entity
   attr_accessor :id
-	attr_accessor :name
-	attr_accessor :position  # Vector of floats
-	
-	def initialize(id, name)
+	attr_accessor :position  # Vector of floats	
+	attr_accessor :name      # nil for non-players
+end
+
+class Player < Entity
+	def initialize(id, name=nil)
 		@id = id
 		@name = name
 	end
 	
 	def to_s
-		"Entity(#{id}, #{name.inspect}, #{position})"
+		"Player(#{id}, #{name.inspect}, #{position})"
 	end
 end
+
+class Mob < Entity
+	@mob_ids = {}       # Associates mob id (50..120) to the different Mob subclasses.
+	def self.mob_ids
+		@mob_ids
+	end
+	
+	def initialize(id)
+		@id = id
+	end
+	
+	def self.mob_id(id)
+		@mob_id = id
+		Mob.mob_ids[id] = self
+	end
+	
+	def self.create(id, type)
+		(Mob.mob_ids[type] || Mob).new(id)
+	end
+
+	def to_s
+		"#{self.class.name}(#{id}, #{position})"
+	end
+end
+
+def Mob(id)
+	klass = Class.new(Mob)
+	klass.mob_id id
+	klass
+end
+
+class Creeper < Mob
+	mob_id 50
+end
+
+class Chicken < Mob
+	mob_id 93
+end
+
 
 module EntityTracker
 	def entities
@@ -46,8 +87,14 @@ module EntityTracker
 	end
 
 	def handle_named_entity_spawn(fields)
-		entities[fields[:eid]] = Entity.new fields[:eid], fields[:player_name]
+		entities[fields[:eid]] = Player.new fields[:eid], fields[:player_name]
 		update_entity_position_absolute fields
+	end
+	
+	def handle_mob_spawn(fields)
+		entities[fields[:eid]] = Mob.create fields[:eid], fields[:type]
+		update_entity_position_absolute fields
+		# Note: we are ignoring fields :yaw, :pitch, :head yaw, and metadata.
 	end
 	
 	def handle_entity_relative_move(fields)

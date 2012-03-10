@@ -181,6 +181,7 @@ class Bot
 				fields[:fireball_speed_z] = read_short
 			end
 		when 0x18
+			handler = :handle_mob_spawn
 			packet_name = 'Mob Spawn'
 			fields[:eid] = read_int
 			fields[:type] = read_byte
