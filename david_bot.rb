@@ -1,4 +1,5 @@
-require_relative 'redstone-bot.rb'
+require_relative 'redstone-bot'
+require_relative 'entity_tracker'
 
 module EvaluatesRuby
 	# Vulnerabilities:
@@ -51,6 +52,7 @@ class DavidBot < Bot
   include JumpsOnCommand
 	include GreetsElavid
 	include EvaluatesRuby
+	include EntityTracker
 	
 	def handle_respawn(fields)
 		chat "#{username} is here!"
