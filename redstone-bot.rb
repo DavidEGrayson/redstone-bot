@@ -71,15 +71,6 @@ class Bot
 		@mutex.synchronize(&block)
 	end
 	
-	def parse_message(fields)
-	end
-	
-	def parse_time(fields)
-	end
-	
-	def respond_explosion(fields)
-	end
-	
 	def handle_health(fields)
 		@health = fields[:health]
 		if dead?
@@ -90,33 +81,9 @@ class Bot
 	def dead?
 		@health <= 0
 	end
-	
-	def respond_entity_look(fields)
-	end
-
-	def handle_destroy_entity(fields)
-	end
-	
-	def handle_entity_relative_move(fields)
-	end
-	
-	def handle_entity_status(fields)
-	end
-	
-	def handle_entity_look_and_relative_move(fields)
-	end
-
-	def handle_entity_teleport(fields)
-	end
 
 	def handle_chat(message)
 		puts message
-	end
-	
-	def handle_named_entity_spawn(fields)
-	end
-
-	def handle_respawn(fields)
 	end
 	
 	def update_position
