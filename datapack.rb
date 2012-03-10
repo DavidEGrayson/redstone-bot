@@ -12,6 +12,10 @@ class Bot
 	def short(s)
 		 [s].pack('s>')
 	end
+	
+	def bool(b)
+		unsigned_byte(b ? 1 : 0)
+	end
 
 	def int(i)
 		 [i].pack('l>')

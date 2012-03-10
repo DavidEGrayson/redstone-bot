@@ -59,6 +59,25 @@ class DavidBot < Bot
 	end
 	
 	def handle_chat(message)
+		respond_to_death_message message
+		respond_to_hit_command message
+	end
+	
+	def respond_to_hit_command(message)
+		return unless message.is_a?(UserChatMessage)
+		if message.contents =~ /hit (.*)/
+			name = $1
+			eid, entity = entities.find{ |id,e| e.name == name }
+			if entity
+				chat "OK, hitting #{entity}"
+				hit(entity)
+			else
+				chat "Who?"
+			end
+		end
+	end
+	
+	def respond_to_death_message(message)
 		return unless message.is_a?(DeathMessage)
 		return if message.username == username
 		response = case message.death_type

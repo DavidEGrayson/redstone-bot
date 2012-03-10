@@ -4,8 +4,8 @@ require_relative 'datapack'
 require_relative 'lib/chat_message'
 
 class Bot
-	def send_keep_alive(fields = {})
-		puts 'Sending Keep Alive (0x00)' if !fields.has_key?(:squelch) 
+	def send_keep_alive(opts = {})
+		puts 'Sending Keep Alive (0x00)' if !opts.has_key?(:squelch) 
 		@socket.write(byte(0x00) + int(0))
 	end
 
@@ -27,7 +27,7 @@ class Bot
 		@socket.write(byte(0x02) + string(str))
 	end
 
-	def send_chat_message(fields = {})
+	def send_chat_message(fields)
 		original_str = fields[:message]
 		safe_str = original_str.chars.select { |c| AllowedChatChars.include?(c) }[0,100].join
 		puts "Sending Chat Message (0x03): #{original_str.inspect}"
@@ -39,21 +39,26 @@ class Bot
 		@socket.write(byte(0x09) + int(fields[:dimension]) + byte(fields[:difficulty]) + byte(fields[:game_mode]) + short(fields[:world_height]) + string(fields[:level_type]))
 	end
 
-	def send_player_look(fields = {})
+	def send_player_look(fields)
 		fields = @position.select { |key, value| [:yaw, :pitch, :on_ground].include?(key) }.merge(fields)
 		puts "Sending Player Look (0x0D) #{fields.inspect}" if !fields[:squelch]
 		@socket.write(byte(0x0C) + float(fields[:yaw]) + float(fields[:pitch]) + byte(fields[:on_ground]))
 	end
 
-	def send_player_position_and_look(opts = {})
+	def send_player_position_and_look(opts)
 		puts "Sending Position & Look (0x0D) #{position_to_string}" if !opts[:squelch]
 		fields = @position
 		@socket.write(byte(0x0D) + double(fields[:x]) + double(fields[:y]) + double(fields[:stance]) + double(fields[:z]) + float(fields[:yaw]) + float(fields[:pitch]) + byte(fields[:on_ground]))
 	end
 
-	def send_entity_head_look(fields={})
+	def send_entity_head_look(fields)
 		puts "Sending Entity Head Look (0x23) #{fields.inspect}" if !fields.has_key?(:squelch) 
 		@socket.write(byte(0x23) + int(fields[:eid]) + byte(fields[:head_yaw]))
+	end
+	
+	def send_use_entity(fields)
+		puts "Sending Use Entity (0x07) #{fields.inspect}"
+		@socket.write byte(0x07) + int(fields[:user]) + int(fields[:target]) + bool(fields[:left_click])
 	end
 
 	@prev_packet_hex = nil

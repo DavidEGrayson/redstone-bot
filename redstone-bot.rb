@@ -162,6 +162,8 @@ class Bot
 			synchronize(&block)
 		end
 	end
+	
+	def hit(entity)
+		send_use_entity user: 0, target: entity.id, left_click: 1
+	end
 end
-
-
