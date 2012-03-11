@@ -70,7 +70,12 @@ class DavidBot < Bot
 			eid, entity = entities.find{ |id,e| e.name == name }
 			if entity
 				chat "OK, hitting #{entity}"
-				hit(entity)
+				Thread.new do
+					(10*5).times do 
+						synchronize { hit(entity) }
+						sleep 0.2
+					end
+				end
 			else
 				chat "Who?"
 			end
