@@ -185,11 +185,11 @@ module EntityTracker
 		@entities ||= {}
 	end
 	
-	def entities_of_type(klass=Mob)
+	def entities_of_type(klass)
 		entities.values.select { |e| klass === e }
 	end
 	
-	def closest_entity(klass=Mob)
+	def closest_entity(klass=Entity)
 		entities_of_type(klass).min_by { |e| distance_to(e.position) }
 	end
 	
