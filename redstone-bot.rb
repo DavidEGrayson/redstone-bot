@@ -133,4 +133,16 @@ class Bot
 	def hit(entity)
 		send_use_entity user: 0, target: entity.id, left_click: 1
 	end
+	
+	def look_at(*args)
+		@position[:yaw], @position[:pitch] = angle_to_look_at(*args)
+	end
+	
+	def angle_to_look_at(target_vector)
+		look_vector = target_vector - position_vector
+		x, y, z = look_vector.to_a
+		yaw = Math::atan2(x, -z) * 180 / Math::PI + 180
+		pitch = -Math::atan2(y, Math::sqrt((x * x) + (z * z))) * 180 / Math::PI
+		[yaw, pitch]
+	end
 end
