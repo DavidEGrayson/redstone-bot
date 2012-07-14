@@ -9,7 +9,7 @@ class Bot
 		@socket.write(byte(0x00) + int(0))
 	end
 
-	PROTOCOL_VERSION = 28
+	PROTOCOL_VERSION = 29
 
 	# Source: http://www.wiki.vg/Chat except I left out the funny characters
 	# because I'd have to think a little bit more about encodings to make it work
@@ -372,6 +372,12 @@ class Bot
 			fields[:custom1] = read_int
 			fields[:custom2] = read_int
 			fields[:custom3] = read_int
+		when 0xCA
+			packet_name = 'Player Abilities'
+			fields[:invulernable] = read_bool
+			fields[:flying] = read_bool
+			fields[:can_fly] = read_bool
+			fields[:instant_destroy] = read_bool
 		when 0xFF
 			handler = :parse_disconnect
 			packet_name = 'Disconnect/Kick'

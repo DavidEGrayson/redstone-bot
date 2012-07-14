@@ -41,6 +41,10 @@ class Bot
 		 @socket.read(1).unpack('c')[0]
 	end
 
+	def read_bool
+		read_byte != 0
+	end
+
 	def read_unsigned_byte
 		 @socket.read(1).unpack('C')[0]
 	end
